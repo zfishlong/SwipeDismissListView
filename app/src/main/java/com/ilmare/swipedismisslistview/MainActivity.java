@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         swipeDismissListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
