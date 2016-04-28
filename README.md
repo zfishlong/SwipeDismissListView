@@ -1,2 +1,2 @@
 # SwipeDismissListView
-![截图](Image/SwipeDismissListView.gif)
+![截图](Images/SwipeDismissListView.gif)
