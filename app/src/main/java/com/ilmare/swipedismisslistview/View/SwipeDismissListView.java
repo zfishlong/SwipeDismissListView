@@ -14,6 +14,8 @@ import android.widget.ListView;
 
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorListenerAdapter;
+import com.nineoldandroids.animation.AnimatorSet;
+import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
@@ -214,17 +216,31 @@ public class SwipeDismissListView extends ListView {
         }
 
         if (dismiss) {
-            ViewPropertyAnimator.animate(mDownView)
-                    .translationX(dismissRight ? mViewWidth : -mViewWidth)//X轴方向的移动距离
-                    .alpha(0)
-                    .setDuration(mAnimationTime)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            //Item滑出界面之后执行删除
-                            performDismiss(mDownView, mDownPosition);
-                        }
-                    });
+
+//            ViewPropertyAnimator.animate(mDownView)
+//                    .translationX(dismissRight ? mViewWidth : -mViewWidth)//X轴方向的移动距离
+//                    .alpha(0)
+//                    .setDuration(mAnimationTime)
+//                    .setListener(new AnimatorListenerAdapter() {
+//                        @Override
+//                        public void onAnimationEnd(Animator animation) {
+//                            //Item滑出界面之后执行删除
+//                            performDismiss(mDownView, mDownPosition);
+//                        }
+//                    });
+
+            AnimatorSet set = new AnimatorSet();
+            set.playTogether(ObjectAnimator.ofFloat(mDownView, "translationX", dismissRight ? mViewWidth : -mViewWidth),
+                    ObjectAnimator.ofFloat(mDownView, "alpha", 0));
+            set.setDuration(mAnimationTime).start();
+            set.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    //Item滑出界面之后执行删除
+                    performDismiss(mDownView, mDownPosition);
+                }
+            });
+
         } else {
             //将item滑动至开始位置
             ViewPropertyAnimator.animate(mDownView)
